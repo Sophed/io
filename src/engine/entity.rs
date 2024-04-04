@@ -1,10 +1,11 @@
-use raylib::drawing::RaylibDraw;
+use raylib::{color::Color, drawing::RaylibDraw};
 
 use super::{hitbox::Hitbox, texture::GameTexture, Vec2};
 
 pub struct Entity {
     pub pos: Vec2,
     pub velocity: Vec2,
+    pub direction: i32,
     pub hitbox: Hitbox,
     pub texture: GameTexture
 }
@@ -23,6 +24,7 @@ pub fn create(pos: Vec2, texture: GameTexture) -> Entity {
     Entity {
         pos,
         velocity: Vec2 { x: 0.0, y: 0.0 },
+        direction: 1,
         hitbox: Hitbox { top_left, bottom_right },
         texture
     }
@@ -36,6 +38,7 @@ impl Entity {
             y: entity.pos.y + entity.velocity.y
         };
         entity.pos = new_pos;
+        Entity::update_hitbox(entity)
     }
 
     pub fn update_hitbox(entity: &mut Entity) {
@@ -49,6 +52,16 @@ impl Entity {
         entity.hitbox.bottom_right = bottom_right;
     }
 
+    pub fn draw_direction(entity: &mut Entity, d: &mut raylib::prelude::RaylibDrawHandle) {
+        d.draw_line(
+            Hitbox::center(&entity.hitbox).x as i32,
+            Hitbox::center(&entity.hitbox).y as i32,
+            (Hitbox::center(&entity.hitbox).x + (100.0 * entity.direction as f32)) as i32,
+            Hitbox::center(&entity.hitbox).y as i32,
+            Color::GREEN
+        )
+    }
+
     pub fn draw(entity: &Entity, d: &mut raylib::prelude::RaylibDrawHandle) {
 
         let x = entity.pos.x as i32;
@@ -58,7 +71,7 @@ impl Entity {
             &entity.texture.data,
             x,
             y,
-            raylib::prelude::Color::WHITE
+            Color::WHITE
         );
     }
 

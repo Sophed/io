@@ -6,7 +6,10 @@ mod engine;
 fn main() {
 
     let (mut rl, thread) = raylib::init()
-        .size(640, 480)
+        .size(
+            320 * engine::PIXEL_SCALE,
+            180 * engine::PIXEL_SCALE
+        )
         .title("Hello, World")
         .build();
 
@@ -25,10 +28,11 @@ fn main() {
             y: d.get_mouse_y() as f32
         };
         player.pos = mouse_pos;
-        Entity::update_hitbox(&mut player);
+        Entity::update(&mut player);
 
         Entity::draw(&player, &mut d);
         Hitbox::draw(&player.hitbox, &mut d);
+        Entity::draw_direction(&mut player, &mut d);
         
         d.draw_fps(10, 10);
     }
