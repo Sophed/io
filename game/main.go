@@ -20,11 +20,11 @@ func main() {
 		"player.png",
 	)
 	test_platform := engine.CreateObject(
-		100, 500,
-		700, 600,
+		100, 400,
+		700, 500,
 	)
 	other_platform := engine.CreateObject(
-		800, 550,
+		800, 450,
 		1200, 600,
 	)
 

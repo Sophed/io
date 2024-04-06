@@ -84,10 +84,14 @@ func (e *Entity) Gravity() {
 }
 
 func (e *Entity) OnGround() bool {
-	simulated_vec1 := Vec2{e.Hitbox.BottomRight.X, e.Hitbox.BottomRight.Y + 1}
-	simulated_vec2 := Vec2{e.Hitbox.TopLeft.X, e.Hitbox.BottomRight.Y + 1}
+	simulated_vec1 := Vec2{e.Hitbox.BottomRight.X, e.Hitbox.BottomRight.Y}
+	simulated_vec2 := Vec2{e.Hitbox.TopLeft.X, e.Hitbox.BottomRight.Y}
 	for _, o := range GAME_OBJECTS {
 		if o.Hitbox.Contains(simulated_vec1) || o.Hitbox.Contains(simulated_vec2) {
+			e.Move(Vec2{
+				e.Pos.X,
+				o.Hitbox.TopLeft.Y - float32(e.Texture.Height),
+			})
 			return true
 		}
 	}
