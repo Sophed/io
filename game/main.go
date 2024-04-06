@@ -23,16 +23,33 @@ func main() {
 		100, 500,
 		700, 600,
 	)
+	other_platform := engine.CreateObject(
+		800, 550,
+		1200, 600,
+	)
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.DarkGray)
 
-		player.Entity.Draw()
 		player.Update()
+
+		if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+			player.Entity.Move(
+				engine.Vec2{
+					X: float32(rl.GetMouseX()),
+					Y: float32(rl.GetMouseY()),
+				},
+			)
+		}
+
+		player.Entity.Draw()
 		test_platform.Draw()
+		other_platform.Draw()
 
 		player.Entity.Hitbox.Draw()
+		test_platform.Hitbox.Draw()
+		other_platform.Hitbox.Draw()
 		rl.DrawFPS(16, 16)
 
 		rl.EndDrawing()

@@ -68,5 +68,6 @@ func (p *Player) Jump() {
 	}
 	p.Jumping = true
 	p.LastJump = time.Now().UnixMilli()
+	p.Entity.Vel.Y = 0
 	p.Entity.Vel.Y -= PLAYER_JUMP_STRENGTH * 10
 }

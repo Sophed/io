@@ -36,6 +36,15 @@ func CreateEntity(pos Vec2, texture rl.Texture2D) *Entity {
 
 const ENTITY_GRAVITY = 2000
 
+func (e *Entity) Move(pos Vec2) {
+	e.Pos = pos
+	bottom_right := Vec2{
+		pos.X + float32(e.Texture.Height),
+		pos.Y + float32(e.Texture.Width),
+	}
+	e.Hitbox = Hitbox{pos, bottom_right}
+}
+
 func (e *Entity) Update() {
 
 	if e.Vel.X > 0 {
@@ -61,12 +70,7 @@ func (e *Entity) Update() {
 		}
 	}*/
 
-	bottom_right := Vec2{
-		new_pos.X + float32(e.Texture.Height),
-		new_pos.Y + float32(e.Texture.Width),
-	}
-	e.Pos = new_pos
-	e.Hitbox = Hitbox{new_pos, bottom_right}
+	e.Move(new_pos)
 }
 
 func (e *Entity) Gravity() {
