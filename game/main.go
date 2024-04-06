@@ -17,16 +17,20 @@ func main() {
 
 	player := engine.CreatePlayer(
 		100, 300,
-		rl.LoadTexture(engine.ASSETS_DIR+"player.png"),
+		"player.png",
+	)
+	test_platform := engine.CreateObject(
+		100, 500,
+		700, 600,
 	)
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.DarkGray)
 
-		player.Update()
-
 		player.Entity.Draw()
+		player.Update()
+		test_platform.Draw()
 
 		player.Entity.Hitbox.Draw()
 		rl.DrawFPS(16, 16)

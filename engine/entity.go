@@ -1,6 +1,8 @@
 package engine
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 type Entity struct {
 	Pos     Vec2
@@ -39,17 +41,48 @@ func (e *Entity) Update() {
 	} else if e.Vel.X < 0 {
 		e.Vel.X++
 	}
+	e.Gravity()
 
 	new_pos := Vec2{
 		e.Pos.X + e.Vel.X*rl.GetFrameTime(),
 		e.Pos.Y + e.Vel.Y*rl.GetFrameTime(),
 	}
-	e.Pos = new_pos
+
+	for _, o := range GAME_OBJECTS {
+		if e.Hitbox.Colliding(o.Hitbox) {
+			if e.Hitbox.TopLeft.X < o.Hitbox.TopLeft.X {
+				new_pos.X = e.Pos.X - rl.GetFrameTime() - 1
+			} else {
+				new_pos.X = e.Pos.X + rl.GetFrameTime() + 1
+			}
+		}
+	}
+
 	bottom_right := Vec2{
 		e.Pos.X + float32(e.Texture.Height),
 		e.Pos.Y + float32(e.Texture.Width),
 	}
+	e.Pos = new_pos
 	e.Hitbox = Hitbox{new_pos, bottom_right}
+}
+
+func (e *Entity) Gravity() {
+	if e.OnGround() {
+		e.Vel.Y = 0
+		return
+	}
+	e.Vel.Y += 0.1
+}
+
+func (e *Entity) OnGround() bool {
+	simulated_vec1 := Vec2{e.Hitbox.BottomRight.X, e.Hitbox.BottomRight.Y + 1}
+	simulated_vec2 := Vec2{e.Hitbox.TopLeft.X, e.Hitbox.BottomRight.Y + 1}
+	for _, o := range GAME_OBJECTS {
+		if o.Hitbox.Contains(simulated_vec1) || o.Hitbox.Contains(simulated_vec2) {
+			return true
+		}
+	}
+	return false
 }
 
 func (e *Entity) Draw() {

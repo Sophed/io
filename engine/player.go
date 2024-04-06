@@ -10,20 +10,21 @@ type Player struct {
 	Entity Entity
 }
 
-func CreatePlayer(x, y int, texture rl.Texture2D) *Player {
+func CreatePlayer(x, y int, texture string) *Player {
+	data := rl.LoadTexture(ASSETS_DIR + texture)
 	return &Player{
 		*CreateEntity(
 			Vec2{
 				float32(x),
 				float32(y),
 			},
-			texture,
+			data,
 		),
 	}
 }
 
 const PLAYER_ACCELERATION = 4
-const PLAYER_MAX_SPEED = 600
+const PLAYER_MAX_SPEED = 500
 
 func (p *Player) Update() {
 

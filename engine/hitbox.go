@@ -28,6 +28,13 @@ func (h *Hitbox) Colliding(other Hitbox) bool {
 		h.BottomRight.Y > other.TopLeft.Y
 }
 
+func (h *Hitbox) Contains(other Vec2) bool {
+	return h.TopLeft.X <= other.X &&
+		h.BottomRight.X >= other.X &&
+		h.TopLeft.Y <= other.Y &&
+		h.BottomRight.Y >= other.Y
+}
+
 func (h *Hitbox) Draw() {
 	rl.DrawRectangleLines(
 		int32(h.TopLeft.X),
