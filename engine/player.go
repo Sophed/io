@@ -30,15 +30,17 @@ func CreatePlayer(x, y int, texture string) *Player {
 	}
 }
 
-const PLAYER_ACCELERATION = 4
-const PLAYER_MAX_SPEED = 500
+const PLAYER_ACCELERATION = 5000
+const PLAYER_MAX_SPEED = 450
 const PLAYER_JUMP_STRENGTH = 60
 
 func (p *Player) Update() {
 
+	accel := PLAYER_ACCELERATION * rl.GetFrameTime()
+
 	if rl.IsKeyDown(rl.KeyA) {
-		if !(math.Abs(float64(p.Entity.Vel.X-PLAYER_ACCELERATION)) > PLAYER_MAX_SPEED) {
-			p.Entity.Vel.X -= PLAYER_ACCELERATION
+		if !(math.Abs(float64(p.Entity.Vel.X-accel)) > PLAYER_MAX_SPEED) {
+			p.Entity.Vel.X -= accel
 		}
 		if !rl.IsKeyDown(rl.KeyD) {
 			p.Entity.Dir = -1
@@ -46,8 +48,8 @@ func (p *Player) Update() {
 	}
 
 	if rl.IsKeyDown(rl.KeyD) {
-		if !(math.Abs(float64(p.Entity.Vel.X+PLAYER_ACCELERATION)) > PLAYER_MAX_SPEED) {
-			p.Entity.Vel.X += PLAYER_ACCELERATION
+		if !(math.Abs(float64(p.Entity.Vel.X+accel)) > PLAYER_MAX_SPEED) {
+			p.Entity.Vel.X += accel
 		}
 		if !rl.IsKeyDown(rl.KeyA) {
 			p.Entity.Dir = 1

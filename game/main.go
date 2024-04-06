@@ -14,6 +14,7 @@ func main() {
 		"io",
 	)
 	defer rl.CloseWindow()
+	//rl.SetTargetFPS(60)
 
 	player := engine.CreatePlayer(
 		100, 300,

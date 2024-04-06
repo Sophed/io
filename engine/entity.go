@@ -47,10 +47,12 @@ func (e *Entity) Move(pos Vec2) {
 
 func (e *Entity) Update() {
 
+	decel := 2000 * rl.GetFrameTime()
+
 	if e.Vel.X > 0 {
-		e.Vel.X--
+		e.Vel.X = max(e.Vel.X-decel, 0)
 	} else if e.Vel.X < 0 {
-		e.Vel.X++
+		e.Vel.X = min(e.Vel.X+decel, 0)
 	}
 	e.Gravity()
 
