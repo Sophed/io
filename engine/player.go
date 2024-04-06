@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"fmt"
 	"math"
 	"time"
 
@@ -9,9 +8,10 @@ import (
 )
 
 type Player struct {
-	Entity   Entity
-	Jumping  bool
-	LastJump int64
+	Entity     Entity
+	Jumping    bool
+	JumpBuffer bool
+	LastJump   int64
 }
 
 func CreatePlayer(x, y int, texture string) *Player {
@@ -24,6 +24,7 @@ func CreatePlayer(x, y int, texture string) *Player {
 			},
 			data,
 		),
+		false,
 		false,
 		0,
 	}
@@ -58,18 +59,11 @@ func (p *Player) Update() {
 	}
 
 	p.Entity.Update()
-	fmt.Println("{}", p.LastJump)
 
 }
 
 func (p *Player) Jump() {
-	if p.Jumping {
-		if time.Now().UnixMilli()-p.LastJump > 25 {
-			p.Jumping = false
-		}
-		return
-	}
-	if !p.Entity.OnGround() {
+	if !p.Entity.OnGround() || time.Now().UnixMilli()-p.LastJump <= 15 {
 		return
 	}
 	p.Jumping = true

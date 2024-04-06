@@ -34,7 +34,7 @@ func CreateEntity(pos Vec2, texture rl.Texture2D) *Entity {
 
 }
 
-const ENTITY_GRAVITY = 1
+const ENTITY_GRAVITY = 2000
 
 func (e *Entity) Update() {
 
@@ -62,8 +62,8 @@ func (e *Entity) Update() {
 	}*/
 
 	bottom_right := Vec2{
-		e.Pos.X + float32(e.Texture.Height),
-		e.Pos.Y + float32(e.Texture.Width),
+		new_pos.X + float32(e.Texture.Height),
+		new_pos.Y + float32(e.Texture.Width),
 	}
 	e.Pos = new_pos
 	e.Hitbox = Hitbox{new_pos, bottom_right}
@@ -76,7 +76,7 @@ func (e *Entity) Gravity() {
 		}
 		return
 	}
-	e.Vel.Y += ENTITY_GRAVITY
+	e.Vel.Y += ENTITY_GRAVITY * rl.GetFrameTime()
 }
 
 func (e *Entity) OnGround() bool {
