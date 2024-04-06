@@ -3,13 +3,15 @@ package engine
 import (
 	"fmt"
 	"math"
+	"time"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Player struct {
-	Entity  Entity
-	Jumping bool
+	Entity   Entity
+	Jumping  bool
+	LastJump int64
 }
 
 func CreatePlayer(x, y int, texture string) *Player {
@@ -23,6 +25,7 @@ func CreatePlayer(x, y int, texture string) *Player {
 			data,
 		),
 		false,
+		0,
 	}
 }
 
@@ -50,23 +53,26 @@ func (p *Player) Update() {
 		}
 	}
 
-	if p.Entity.OnGround() {
-		p.Jumping = false
-	}
-
 	if rl.IsKeyDown(rl.KeySpace) {
 		p.Jump()
 	}
 
 	p.Entity.Update()
-	fmt.Println("{}", p.Entity.Vel.Y)
+	fmt.Println("{}", p.LastJump)
 
 }
 
 func (p *Player) Jump() {
-	if !p.Entity.OnGround() || p.Jumping {
+	if p.Jumping {
+		if time.Now().UnixMilli()-p.LastJump > 25 {
+			p.Jumping = false
+		}
+		return
+	}
+	if !p.Entity.OnGround() {
 		return
 	}
 	p.Jumping = true
-	p.Entity.Vel.Y -= PLAYER_JUMP_STRENGTH * 2
+	p.LastJump = time.Now().UnixMilli()
+	p.Entity.Vel.Y -= PLAYER_JUMP_STRENGTH * 10
 }
