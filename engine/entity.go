@@ -34,6 +34,8 @@ func CreateEntity(pos Vec2, texture rl.Texture2D) *Entity {
 
 }
 
+const ENTITY_GRAVITY = 1
+
 func (e *Entity) Update() {
 
 	if e.Vel.X > 0 {
@@ -48,7 +50,8 @@ func (e *Entity) Update() {
 		e.Pos.Y + e.Vel.Y*rl.GetFrameTime(),
 	}
 
-	for _, o := range GAME_OBJECTS {
+	// We'll figure this out later
+	/*for _, o := range GAME_OBJECTS {
 		if e.Hitbox.Colliding(o.Hitbox) {
 			if e.Hitbox.TopLeft.X < o.Hitbox.TopLeft.X {
 				new_pos.X = e.Pos.X - rl.GetFrameTime() - 1
@@ -56,7 +59,7 @@ func (e *Entity) Update() {
 				new_pos.X = e.Pos.X + rl.GetFrameTime() + 1
 			}
 		}
-	}
+	}*/
 
 	bottom_right := Vec2{
 		e.Pos.X + float32(e.Texture.Height),
@@ -68,10 +71,12 @@ func (e *Entity) Update() {
 
 func (e *Entity) Gravity() {
 	if e.OnGround() {
-		e.Vel.Y = 0
+		if e.Vel.Y > 0 {
+			e.Vel.Y = 0
+		}
 		return
 	}
-	e.Vel.Y += 0.1
+	e.Vel.Y += ENTITY_GRAVITY
 }
 
 func (e *Entity) OnGround() bool {

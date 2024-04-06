@@ -1,13 +1,15 @@
 package engine
 
 import (
+	"fmt"
 	"math"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Player struct {
-	Entity Entity
+	Entity  Entity
+	Jumping bool
 }
 
 func CreatePlayer(x, y int, texture string) *Player {
@@ -20,11 +22,13 @@ func CreatePlayer(x, y int, texture string) *Player {
 			},
 			data,
 		),
+		false,
 	}
 }
 
 const PLAYER_ACCELERATION = 4
 const PLAYER_MAX_SPEED = 500
+const PLAYER_JUMP_STRENGTH = 60
 
 func (p *Player) Update() {
 
@@ -46,6 +50,23 @@ func (p *Player) Update() {
 		}
 	}
 
-	p.Entity.Update()
+	if p.Entity.OnGround() {
+		p.Jumping = false
+	}
 
+	if rl.IsKeyDown(rl.KeySpace) {
+		p.Jump()
+	}
+
+	p.Entity.Update()
+	fmt.Println("{}", p.Entity.Vel.Y)
+
+}
+
+func (p *Player) Jump() {
+	if !p.Entity.OnGround() || p.Jumping {
+		return
+	}
+	p.Jumping = true
+	p.Entity.Vel.Y -= PLAYER_JUMP_STRENGTH * 2
 }
