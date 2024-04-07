@@ -10,8 +10,7 @@ import (
 type Player struct {
 	Entity     Entity
 	Jumping    bool
-	JumpBuffer bool
-	LastJump   int64
+	JumpBuffer int64
 }
 
 func CreatePlayer(x, y int, texture string) *Player {
@@ -24,7 +23,6 @@ func CreatePlayer(x, y int, texture string) *Player {
 			},
 			data,
 		),
-		false,
 		false,
 		0,
 	}
@@ -56,7 +54,11 @@ func (p *Player) Update() {
 		}
 	}
 
-	if rl.IsKeyDown(rl.KeySpace) {
+	if rl.IsKeyPressed(rl.KeySpace) {
+		p.JumpBuffer = time.Now().UnixMilli()
+	}
+
+	if p.Entity.OnGround() && time.Now().UnixMilli()-p.JumpBuffer <= 100 {
 		p.Jump()
 	}
 
@@ -65,11 +67,7 @@ func (p *Player) Update() {
 }
 
 func (p *Player) Jump() {
-	if !p.Entity.OnGround() || time.Now().UnixMilli()-p.LastJump <= 15 {
-		return
-	}
 	p.Jumping = true
-	p.LastJump = time.Now().UnixMilli()
 	p.Entity.Vel.Y = 0
 	p.Entity.Vel.Y -= PLAYER_JUMP_STRENGTH * 10
 }
