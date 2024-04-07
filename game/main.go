@@ -16,21 +16,11 @@ func main() {
 	defer rl.CloseWindow()
 	//rl.SetTargetFPS(60)
 
+	engine.LoadMap("map.png")
+
 	player := engine.CreatePlayer(
 		100, 300,
 		"player.png",
-	)
-	test_platform := engine.CreateObject(
-		100, 400,
-		700, 500,
-	)
-	other_platform := engine.CreateObject(
-		800, 450,
-		1200, 600,
-	)
-	wall := engine.CreateObject(
-		1000, 250,
-		1050, 450,
 	)
 
 	for !rl.WindowShouldClose() {
@@ -48,15 +38,14 @@ func main() {
 			)
 		}
 
+		for _, o := range engine.GAME_OBJECTS {
+			o.Draw()
+			o.Hitbox.Draw()
+		}
+
 		player.Entity.Draw()
-		test_platform.Draw()
-		other_platform.Draw()
-		wall.Draw()
 
 		player.Entity.Hitbox.Draw()
-		test_platform.Hitbox.Draw()
-		other_platform.Hitbox.Draw()
-		wall.Hitbox.Draw()
 		rl.DrawFPS(16, 16)
 
 		rl.EndDrawing()
