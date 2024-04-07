@@ -28,6 +28,10 @@ func main() {
 		800, 450,
 		1200, 600,
 	)
+	wall := engine.CreateObject(
+		1000, 250,
+		1050, 450,
+	)
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
@@ -47,10 +51,12 @@ func main() {
 		player.Entity.Draw()
 		test_platform.Draw()
 		other_platform.Draw()
+		wall.Draw()
 
 		player.Entity.Hitbox.Draw()
 		test_platform.Hitbox.Draw()
 		other_platform.Hitbox.Draw()
+		wall.Hitbox.Draw()
 		rl.DrawFPS(16, 16)
 
 		rl.EndDrawing()
