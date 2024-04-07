@@ -36,6 +36,8 @@ func main() {
 					Y: float32(rl.GetMouseY()),
 				},
 			)
+			player.Entity.Vel.X = 0
+			player.Entity.Vel.Y = 0
 		}
 
 		for _, o := range engine.GAME_OBJECTS {

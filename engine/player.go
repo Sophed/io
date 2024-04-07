@@ -59,6 +59,7 @@ func (p *Player) Update() {
 	}
 
 	if p.Entity.OnGround() && time.Now().UnixMilli()-p.JumpBuffer <= 100 {
+		p.JumpBuffer = 0
 		p.Jump()
 	}
 
