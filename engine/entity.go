@@ -34,6 +34,9 @@ func CreateEntity(pos Vec2, texture rl.Texture2D) *Entity {
 
 }
 
+const MaxUint = ^uint(0)
+const MaxInt = int(MaxUint >> 1)
+
 const ENTITY_GRAVITY = 2000
 
 func (e *Entity) Move(pos Vec2) {
