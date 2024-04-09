@@ -4,13 +4,14 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 
 type NewHitbox struct {
 	Origin Vec2
+	Closed bool
 	Points []Vec2
 	Width  int
 	Height int
 }
 
-func CreateNewHitbox(origin Vec2, points []Vec2) *NewHitbox {
-	box := NewHitbox{origin, points, 0, 0}
+func CreateNewHitbox(origin Vec2, points []Vec2, close bool) *NewHitbox {
+	box := NewHitbox{origin, close, points, 0, 0}
 	box.Width = box.SetWidth()
 	box.Height = box.SetHeight()
 	return &box
@@ -55,11 +56,39 @@ func (h *NewHitbox) Center() Vec2 {
 	}
 }
 
+func (o *NewHitbox) Collidiing(p *NewHitbox) bool {
+
+	for i := 0; i < len(o.Points)-1; i++ {
+		a := o.Points[i]
+		b := o.Points[i+1]
+
+		for i := 0; i < len(p.Points)-1; i++ {
+			c := o.Points[i]
+			d := o.Points[i+1]
+
+			interesect := ccw(a, b, d) != ccw(b, c, d) && ccw(a, b, c) != ccw(a, b, d)
+			if interesect {
+				return true
+			}
+
+		}
+
+	}
+	return false
+}
+
+func ccw(a Vec2, b Vec2, c Vec2) bool {
+	return (c.Y-a.Y)*(b.X-a.X) > (b.Y-a.Y)*(c.X-a.X)
+}
+
 func (h *NewHitbox) Draw() {
 
 	for i, p := range h.Points {
 
 		if i+1 > (len(h.Points) - 1) {
+			if !h.Closed {
+				return
+			}
 			target := h.Points[0]
 			rl.DrawLine(
 				int32(h.Origin.X+p.X),

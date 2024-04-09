@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/sophed/io/engine"
 )
@@ -36,7 +38,25 @@ func main() {
 				X: 0, Y: 0,
 			},
 		},
+		true,
 	)
+
+	var test_cursor engine.NewHitbox
+	test_cursor.Points = []engine.Vec2{
+		{
+			X: -50, Y: -50,
+		},
+		{
+			X: 50, Y: -50,
+		},
+		{
+			X: 50, Y: 50,
+		},
+		{
+			X: -50, Y: 50,
+		},
+	}
+	test_cursor.Closed = true
 
 	player := engine.CreatePlayer(
 		100, 300,
@@ -66,6 +86,13 @@ func main() {
 				Y: float32(rl.GetMouseY()),
 			}
 		}
+
+		test_cursor.Origin = engine.Vec2{
+			X: float32(rl.GetMouseX()),
+			Y: float32(rl.GetMouseY()),
+		}
+		test_cursor.Draw()
+		fmt.Println(test_hitbox.Collidiing(&test_cursor))
 
 		for _, o := range engine.GAME_OBJECTS {
 			o.Draw()
